@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>位置情報取得デモ</title>
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha512-Zcn6bjR/8RZbLEpLIeOwNtzREBAJnUKESxces60Mpoj+2okopSAcSUIUOseddDm0cxnGQzxIR7vJgsLZbdLE3w=="
+    crossorigin=""
+  >
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <header class="page-header">
+    <h1>位置情報取得デモアプリ</h1>
+    <p>写真に含まれるメタ情報から位置情報を抽出し、地図上に表示します。</p>
+  </header>
+
+  <main>
+    <section class="controls">
+      <h2>解析対象の写真を選択</h2>
+      <p>
+        選択した写真のメタ情報は端末上で解析され、サーバーへ自動送信されることはありません。
+        <a class="help-link" href="./help.html" target="_blank" rel="noopener noreferrer">位置情報の付け方を確認</a>
+      </p>
+      <label class="file-input">
+        <span id="fileInputLabel">画像ファイルを選択（複数可）</span>
+        <input id="photoInput" type="file" accept="image/*" multiple>
+      </label>
+      <button id="analyzeButton" type="button" disabled>解析</button>
+      <p id="statusMessage" class="status-message"></p>
+      <ul id="results" class="results"></ul>
+    </section>
+
+    <section class="map-panel">
+      <h2>地図表示</h2>
+      <div id="map"></div>
+    </section>
+  </main>
+
+  <footer class="page-footer">
+    <p>地図タイルは外部サービスから取得しますが、位置情報の解析処理は端末上で完結します。</p>
+  </footer>
+
+  <script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha512-BwHfrr4c9kmRkLw6iXFdzcdWV/PGkVgiIyIWLLlTSXzWQzxuSg4DiQUCpauz/EWjgk5TYQqX/kvn9pG1NpYfqg=="
+    crossorigin=""
+  ></script>
+  <script src="./app.js"></script>
+</body>
+</html>
