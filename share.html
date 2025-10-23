@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>共有用QRコード</title>
+  <link rel="stylesheet" href="./styles.css?v=1.1.0">
+</head>
+<body class="share-page">
+  <header class="page-header">
+    <h1>デモアプリ共有QRコード</h1>
+    <p>下記のQRコードを読み取ると、位置情報取得デモアプリへアクセスできます。</p>
+  </header>
+
+  <main class="share-content">
+    <section class="qr-card">
+      <div class="qr-visual" id="qrCode"></div>
+      <p class="qr-caption">アクセスURL</p>
+      <p class="qr-url" id="appUrlText">読み込み中...</p>
+      <a class="back-button" href="./index.html">アプリに戻る</a>
+    </section>
+  </main>
+
+  <footer class="page-footer">
+    <p>共有後は、位置情報の扱いに注意しながらアプリをご利用ください。</p>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" referrerpolicy="no-referrer"></script>
+  <script>
+    (function initSharePage() {
+      const qrContainer = document.getElementById("qrCode");
+      const urlText = document.getElementById("appUrlText");
+      //const appUrl = new URL("./index.html", window.location.href).href;
+      const appUrl = new URL("./", window.location.href).href;
+
+
+      urlText.textContent = appUrl;
+
+      if (window.QRCode && qrContainer) {
+        // 生成済み要素をクリアしてから QR を描画
+        qrContainer.innerHTML = "";
+        new QRCode(qrContainer, {
+          text: appUrl,
+          width: 220,
+          height: 220,
+          correctLevel: QRCode.CorrectLevel.M,
+        });
+      } else if (qrContainer) {
+        qrContainer.textContent = "QRコードの読み込みに失敗しました。";
+      }
+    })();
+  </script>
+</body>
+</html>

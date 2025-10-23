@@ -10,7 +10,7 @@
     integrity="sha512-Zcn6bjR/8RZbLEpLIeOwNtzREBAJnUKESxces60Mpoj+2okopSAcSUIUOseddDm0cxnGQzxIR7vJgsLZbdLE3w=="
     crossorigin=""
   >
-  <link rel="stylesheet" href="./styles.css">
+  <link rel="stylesheet" href="./styles.css?v=1.1.0">
 </head>
 <body>
   <header class="page-header">
@@ -20,10 +20,12 @@
 
   <main>
     <section class="controls">
-      <h2>解析対象の写真を選択</h2>
+      <h2>解析対象の写真（予め撮影したもの）を選択してください</h2>
       <p>
-        選択した写真のメタ情報は端末上で解析され、サーバーへ自動送信されることはありません。
-        <a class="help-link" href="./help.html" target="_blank" rel="noopener noreferrer">位置情報の付け方を確認</a>
+	<ul>
+        <li><a class="help-link" href="./help.html" target="_blank" rel="noopener noreferrer">位置情報の付け方を確認</a>
+        <li><a class="help-link" href="./share.html" target="_blank" rel="noopener noreferrer">共有用QRコードを表示</a>
+	</ul>
       </p>
       <label class="file-input">
         <span id="fileInputLabel">画像ファイルを選択（複数可）</span>
@@ -41,7 +43,9 @@
   </main>
 
   <footer class="page-footer">
-    <p>地図タイルは外部サービスから取得しますが、位置情報の解析処理は端末上で完結します。</p>
+    <p>写真のメタ情報は端末上で解析されサーバーへは送信されません。</p>
+    <p>地図タイルは外部サービスから取得しますが位置情報の重畳は端末上で行います。</p>
+    <p class="version-text">アプリバージョン: <span id="appVersion">-</span></p>
   </footer>
 
   <script
@@ -49,6 +53,6 @@
     integrity="sha512-BwHfrr4c9kmRkLw6iXFdzcdWV/PGkVgiIyIWLLlTSXzWQzxuSg4DiQUCpauz/EWjgk5TYQqX/kvn9pG1NpYfqg=="
     crossorigin=""
   ></script>
-  <script src="./app.js"></script>
+  <script src="./app.js?v=1.1.0"></script>
 </body>
 </html>

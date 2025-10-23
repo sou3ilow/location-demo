@@ -6,6 +6,13 @@ const resultsList = document.getElementById("results");
 const statusMessage = document.getElementById("statusMessage");
 const fileInputLabel = document.getElementById("fileInputLabel");
 const fileInputWrapper = document.querySelector(".file-input");
+const appVersionSpan = document.getElementById("appVersion");
+
+const APP_VERSION = "1.1.0";
+
+if (appVersionSpan) {
+  appVersionSpan.textContent = APP_VERSION;
+}
 
 const defaultView = [35.6762, 139.6503];
 const defaultZoom = 5;
@@ -49,6 +56,14 @@ async function handleAnalyze() {
     resultsList.appendChild(listItem);
 
     try {
+      const formatWarning = validateFileFormat(file);
+
+      if (formatWarning) {
+        messageSpan.textContent = formatWarning;
+        messageSpan.classList.add("result-error");
+        continue;
+      }
+
       const coordinates = await extractGpsFromFile(file);
 
       if (!coordinates) {
@@ -109,12 +124,43 @@ function createResultItem(fileName) {
   return { listItem, messageSpan };
 }
 
+function validateFileFormat(file) {
+  const type = (file.type || "").toLowerCase();
+  const name = (file.name || "").toLowerCase();
+
+  const isJpegType = type === "image/jpeg";
+  const hasJpegExtension = /\.jpe?g$/.test(name);
+
+  if (isJpegType || hasJpegExtension || isHeicFileType(type, name)) {
+    return null;
+  }
+
+  return "この形式の写真は解析対象外です。JPEGまたはHEIC形式で撮影してください。";
+}
+
 async function extractGpsFromFile(file) {
   const buffer = await file.arrayBuffer();
   const dataView = new DataView(buffer);
+  const type = (file.type || "").toLowerCase();
+  const name = (file.name || "").toLowerCase();
+  const isHeic = isHeicFileType(type, name);
 
   if (!isJpeg(dataView)) {
-    throw new Error("JPEG形式のメタ情報にのみ対応しています。");
+    if (!isHeic) {
+      throw new Error("JPEGまたはHEIC形式の写真に対応しています。");
+    }
+  }
+
+  if (isHeic) {
+    const exifInfo = locateExifSegmentInHeic(dataView);
+
+    if (!exifInfo) {
+      throw new Error(
+        "位置情報が含まれていないか、共有時に削除された可能性があります。"
+      );
+    }
+
+    return parseGpsFromTiff(dataView, exifInfo);
   }
 
   const exifInfo = locateExifSegment(dataView);
@@ -173,6 +219,43 @@ function locateExifSegment(dataView) {
     }
 
     offset += 2 + 2 + length;
+  }
+
+  return null;
+}
+
+function locateExifSegmentInHeic(dataView) {
+  const signature = [0x45, 0x78, 0x69, 0x66, 0x00, 0x00]; // "Exif\0\0"
+  const max = dataView.byteLength - signature.length - 2;
+
+  for (let offset = 0; offset <= max; offset += 1) {
+    let matched = true;
+
+    for (let index = 0; index < signature.length; index += 1) {
+      if (dataView.getUint8(offset + index) !== signature[index]) {
+        matched = false;
+        break;
+      }
+    }
+
+    if (!matched) {
+      continue;
+    }
+
+    const tiffOffset = offset + signature.length;
+
+    if (tiffOffset + 8 > dataView.byteLength) {
+      continue;
+    }
+
+    const byteOrder = getAscii(dataView, tiffOffset, 2);
+
+    if (byteOrder !== "II" && byteOrder !== "MM") {
+      continue;
+    }
+
+    const littleEndian = byteOrder === "II";
+    return { tiffOffset, littleEndian };
   }
 
   return null;
@@ -401,4 +484,13 @@ function escapeHtml(text) {
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#39;");
+}
+
+function isHeicFileType(type, name) {
+  return (
+    type.includes("heic") ||
+    type.includes("heif") ||
+    /\.heic$/.test(name) ||
+    /\.heif$/.test(name)
+  );
 }

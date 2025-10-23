@@ -15,6 +15,12 @@ body {
   margin: 0 auto;
 }
 
+.share-page main {
+  display: flex;
+  justify-content: center;
+  padding: 2rem;
+}
+
 .page-header,
 .page-footer {
   background-color: #13294b;
@@ -32,6 +38,12 @@ body {
   margin: 0;
 }
 
+.version-text {
+  margin-top: 0.35rem;
+  font-size: 0.9rem;
+  opacity: 0.8;
+}
+
 main {
   display: flex;
   flex-wrap: wrap;
@@ -41,6 +53,82 @@ main {
 
 .help-content {
   padding: 2rem;
+}
+
+.share-content {
+  width: 100%;
+  max-width: 420px;
+  padding: 2rem;
+}
+
+.qr-card {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+  text-align: center;
+}
+
+.qr-visual {
+  margin: 0 auto 1.5rem;
+  width: 220px;
+  height: 220px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.qr-caption {
+  margin: 0;
+  font-weight: 600;
+  color: #0d274d;
+}
+
+.qr-url {
+  margin: 0.5rem 0 1rem;
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+  font-size: 0.95rem;
+  word-break: break-all;
+  color: #1c1e21;
+}
+
+.qr-note {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #4a5568;
+}
+
+.back-link {
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+.back-button {
+  display: inline-block;
+  padding: 0.6rem 1.6rem;
+  border-radius: 999px;
+  background-color: #1d4ed8;
+  color: #ffffff;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.back-link .back-button {
+  margin-top: 0;
+}
+
+.qr-card .back-button {
+  margin-top: 1.5rem;
+}
+
+.back-button:hover {
+  background-color: #1e40af;
+}
+
+.back-button:active {
+  transform: translateY(1px);
 }
 
 .controls,
@@ -181,6 +269,14 @@ button:disabled {
   }
 
   .help-content {
+    padding: 1.5rem 1rem;
+  }
+
+  .share-page main {
+    padding: 1.5rem 1rem;
+  }
+
+  .share-content {
     padding: 1.5rem 1rem;
   }
 
